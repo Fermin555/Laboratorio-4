@@ -110,7 +110,65 @@ def limpiar_campos():
     entry_det.config(state="readonly")
 
 def calcular_sistema():
-    pass
+    try:
+        dim = dimension.get()
+        
+        # 1. Leer la matriz A
+        matriz_numeros = []
+        for i in range(dim):
+            fila = []
+            for j in range(dim):
+                fila.append(float(entradas_A[i][j].get()))
+            matriz_numeros.append(fila)
+        A = np.array(matriz_numeros)
+        
+        # 2. Leer el vector b
+        vector_numeros = []
+        for i in range(dim):
+            vector_numeros.append(float(entradas_b[i].get()))
+        b = np.array(vector_numeros)
+        
+        # 3. Calcular el determinante principal
+        det_A = np.linalg.det(A)
+        
+        # Preparamos las casillas de x para escribir
+        for entry in entradas_x:
+            entry.config(state="normal")
+            entry.delete(0, tk.END)
+            
+        # Si el determinante es 0, el sistema no tiene solución única
+        if abs(det_A) < 1e-9: 
+            entradas_x[0].insert(0, "Det=0")
+            for entry in entradas_x:
+                entry.config(state="readonly")
+            return
+            
+        # 4. Aplicar la Regla de Cramer
+        for i in range(dim):
+            # Creamos una copia de A para no pisar la original
+            Ai = np.copy(A)
+            
+            # Reemplazamos la columna 'i' entera por el vector 'b'
+            Ai[:, i] = b
+            
+            # Calculamos la incógnita xi
+            xi = np.linalg.det(Ai) / det_A
+            
+            # Mostramos el resultado
+            entradas_x[i].insert(0, f"{xi:.4f}")
+            
+        # Volvemos a bloquear las casillas
+        for entry in entradas_x:
+            entry.config(state="readonly")
+            
+    except ValueError:
+        # En caso de campos vacíos o letras
+        for entry in entradas_x:
+            entry.config(state="normal")
+            entry.delete(0, tk.END)
+        entradas_x[0].insert(0, "Error")
+        for entry in entradas_x:
+            entry.config(state="readonly")
 
 def calcular_determinante():
     try:
