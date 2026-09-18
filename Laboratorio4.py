@@ -35,5 +35,49 @@ rb_4x4.pack(anchor="w")
 
 # --- Fin PASO 2 ---
 
+# --- PASO 3: Cuadrículas para las matrices A, b y x ---
+# Creamos un marco (Frame) a la derecha para organizar las entradas de texto
+frame_matrices = tk.Frame(ventana, padx=20, pady=20)
+frame_matrices.grid(row=0, column=1, sticky="n")
+
+# Títulos superiores ("A", "b", "x")
+tk.Label(frame_matrices, text="A", font=("Arial", 10, "bold")).grid(row=0, column=1, columnspan=4)
+tk.Label(frame_matrices, text="b", font=("Arial", 10, "bold")).grid(row=0, column=5, padx=(15, 0))
+tk.Label(frame_matrices, text="x", font=("Arial", 10, "bold")).grid(row=0, column=6, padx=(15, 0))
+
+# Índices de columnas para A (0, 1, 2, 3)
+for j in range(4):
+    tk.Label(frame_matrices, text=str(j)).grid(row=1, column=j+1)
+
+# Listas de Python para guardar las referencias a los campos de texto
+# Esto nos va a servir en el futuro para extraer los números que escriba el usuario
+entradas_A = []
+entradas_b = []
+entradas_x = []
+
+# Creación de la cuadrícula 4x4 y los vectores 4x1
+for i in range(4):
+    # Índice de fila a la izquierda (0, 1, 2, 3)
+    tk.Label(frame_matrices, text=str(i)).grid(row=i+2, column=0, padx=(0, 5))
+    
+    # Filas y columnas para la matriz A
+    fila_A = []
+    for j in range(4):
+        entry = tk.Entry(frame_matrices, width=5)
+        entry.grid(row=i+2, column=j+1, padx=2, pady=2)
+        fila_A.append(entry)
+    entradas_A.append(fila_A)
+    
+    # Columna de entradas para el vector b
+    entry_b = tk.Entry(frame_matrices, width=5)
+    entry_b.grid(row=i+2, column=5, padx=(15, 0), pady=2)
+    entradas_b.append(entry_b)
+    
+    # Columna de entradas para el vector x (solo lectura para mostrar el resultado)
+    entry_x = tk.Entry(frame_matrices, width=5, state="readonly")
+    entry_x.grid(row=i+2, column=6, padx=(15, 0), pady=2)
+    entradas_x.append(entry_x)
+# --- Fin PASO 3 ---
+
 # Iniciar el bucle de eventos
 ventana.mainloop()
