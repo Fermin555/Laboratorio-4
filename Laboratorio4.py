@@ -90,13 +90,59 @@ lbl_ayuda.grid(row=0, column=0, columnspan=4, pady=(0, 15))
 
 # 1. Definimos las funciones vacías (las programaremos después)
 def limpiar_campos():
-    pass
+    # Limpiamos todas las cuadrículas de A
+    for fila in entradas_A:
+        for entry in fila:
+            entry.delete(0, tk.END)
+    
+    # Limpiamos los vectores b y x
+    for entry in entradas_b:
+        entry.delete(0, tk.END)
+    
+    for entry in entradas_x:
+        entry.config(state="normal") # Hay que habilitarlo para poder borrarlo
+        entry.delete(0, tk.END)
+        entry.config(state="readonly")
+        
+    # Limpiamos el determinante
+    entry_det.config(state="normal")
+    entry_det.delete(0, tk.END)
+    entry_det.config(state="readonly")
 
 def calcular_sistema():
     pass
 
 def calcular_determinante():
-    pass
+    try:
+        # 1. Averiguamos qué dimensión eligió el usuario (2, 3 o 4)
+        dim = dimension.get()
+        
+        # 2. Armamos una lista de Python leyendo solo las celdas necesarias
+        matriz_numeros = []
+        for i in range(dim):
+            fila_numeros = []
+            for j in range(dim):
+                # Extraemos el texto de cada cajita y lo convertimos a número flotante
+                valor = float(entradas_A[i][j].get())
+                fila_numeros.append(valor)
+            matriz_numeros.append(fila_numeros)
+            
+        # 3. Convertimos esa lista a un array de Numpy y calculamos
+        matriz_np = np.array(matriz_numeros)
+        det = np.linalg.det(matriz_np)
+        
+        # 4. Mostramos el resultado redondeado a 4 decimales
+        entry_det.config(state="normal")
+        entry_det.delete(0, tk.END)
+        entry_det.insert(0, f"{det:.4f}")
+        entry_det.config(state="readonly")
+        
+    except ValueError:
+        # Si el usuario dejó un campo vacío o puso una letra, mostramos un error
+        entry_det.config(state="normal")
+        entry_det.delete(0, tk.END)
+        entry_det.insert(0, "Error de carga")
+        entry_det.config(state="readonly")
 
 # 2. Botones centrales
 btn_borrar = tk.Button(frame_inferior, text="Borrar valores", command=limpiar_campos)
