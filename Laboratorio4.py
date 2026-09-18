@@ -4,12 +4,16 @@
 import tkinter as tk
 import numpy as np
 
-# --- PASO 1: Ventana principal ---
+# =========================================================================
+# PASO 1: Ventana principal
+# =========================================================================
 ventana = tk.Tk()
 ventana.title("Resolución de sistemas de ecuaciones lineales mediante la Regla de Cramer")
 ventana.geometry("600x400")
 
-# --- PASO 2: Panel lateral de Dimensión ---
+# =========================================================================
+# PASO 2: Panel lateral de Dimensión
+# =========================================================================
 # Creamos una variable de Tkinter para guardar la dimensión seleccionada. 
 # Por defecto, la imagen muestra seleccionado el 3x3.
 dimension = tk.IntVar(value=3)
@@ -33,9 +37,10 @@ rb_3x3.pack(anchor="w")
 rb_4x4 = tk.Radiobutton(frame_izq, text="4 x 4", variable=dimension, value=4)
 rb_4x4.pack(anchor="w")
 
-# --- Fin PASO 2 ---
 
-# --- PASO 3: Cuadrículas para las matrices A, b y x ---
+# =========================================================================
+# PASO 3: Cuadrículas para las matrices A, b y x
+# =========================================================================
 # Creamos un marco (Frame) a la derecha para organizar las entradas de texto
 frame_matrices = tk.Frame(ventana, padx=20, pady=20)
 frame_matrices.grid(row=0, column=1, sticky="n")
@@ -77,9 +82,11 @@ for i in range(4):
     entry_x = tk.Entry(frame_matrices, width=5, state="readonly")
     entry_x.grid(row=i+2, column=6, padx=(15, 0), pady=2)
     entradas_x.append(entry_x)
-# --- Fin PASO 3 ---
 
-# --- PASO 4: Botones de Acción y Determinante ---
+
+# =========================================================================
+# PASO 4: Botones de Acción y Determinante
+# =========================================================================
 # Creamos un marco inferior que ocupe las dos columnas de arriba
 frame_inferior = tk.Frame(ventana, pady=10)
 frame_inferior.grid(row=1, column=0, columnspan=2)
@@ -88,7 +95,11 @@ frame_inferior.grid(row=1, column=0, columnspan=2)
 lbl_ayuda = tk.Label(frame_inferior, text="Ayuda: el sistema de ecuaciones permite calcular A.x = b\nSe deben cargar los valores de A y b y luego,\nal calcular, se obtienen los valores de x")
 lbl_ayuda.grid(row=0, column=0, columnspan=4, pady=(0, 15))
 
-# 1. Definimos las funciones vacías (las programaremos después)
+
+# =========================================================================
+# FUNCIONES DE LOS BOTONES
+# =========================================================================
+
 def limpiar_campos():
     # Limpiamos todas las cuadrículas de A
     for fila in entradas_A:
@@ -143,7 +154,7 @@ def calcular_sistema():
                 entry.config(state="readonly")
             return
             
-        # 4. Aplicar la Regla de Cramer
+        # --- SECCIÓN DE CÁLCULO (Cramer) ---
         for i in range(dim):
             # Creamos una copia de A para no pisar la original
             Ai = np.copy(A)
@@ -156,6 +167,7 @@ def calcular_sistema():
             
             # Mostramos el resultado
             entradas_x[i].insert(0, f"{xi:.4f}")
+        # -----------------------------------
             
         # Volvemos a bloquear las casillas
         for entry in entradas_x:
@@ -202,14 +214,18 @@ def calcular_determinante():
         entry_det.insert(0, "Error de carga")
         entry_det.config(state="readonly")
 
-# 2. Botones centrales
+
+# =========================================================================
+# BOTONES CENTRALES Y DETERMINANTE
+# =========================================================================
+
 btn_borrar = tk.Button(frame_inferior, text="Borrar valores", command=limpiar_campos)
 btn_borrar.grid(row=1, column=1, padx=5, sticky="e")
 
 btn_calcular = tk.Button(frame_inferior, text="Calcular", command=calcular_sistema)
 btn_calcular.grid(row=1, column=2, padx=5, sticky="w")
 
-# 3. Fila del Determinante
+# Fila del Determinante
 lbl_det = tk.Label(frame_inferior, text="Determinante:")
 lbl_det.grid(row=2, column=0, sticky="e", pady=(15, 0))
 
@@ -219,7 +235,11 @@ entry_det.grid(row=2, column=1, pady=(15, 0))
 
 btn_det = tk.Button(frame_inferior, text="Calcular det.", command=calcular_determinante)
 btn_det.grid(row=2, column=2, padx=5, sticky="w", pady=(15, 0))
-# --- Fin PASO 4 ---
+
+
+# =========================================================================
+# INICIO DE LA APLICACIÓN
+# =========================================================================
 
 # Iniciar el bucle de eventos
 ventana.mainloop()
