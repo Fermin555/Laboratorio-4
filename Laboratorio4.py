@@ -79,5 +79,43 @@ for i in range(4):
     entradas_x.append(entry_x)
 # --- Fin PASO 3 ---
 
+# --- PASO 4: Botones de Acción y Determinante ---
+# Creamos un marco inferior que ocupe las dos columnas de arriba
+frame_inferior = tk.Frame(ventana, pady=10)
+frame_inferior.grid(row=1, column=0, columnspan=2)
+
+# Etiqueta de ayuda tal cual pide el laboratorio
+lbl_ayuda = tk.Label(frame_inferior, text="Ayuda: el sistema de ecuaciones permite calcular A.x = b\nSe deben cargar los valores de A y b y luego,\nal calcular, se obtienen los valores de x")
+lbl_ayuda.grid(row=0, column=0, columnspan=4, pady=(0, 15))
+
+# 1. Definimos las funciones vacías (las programaremos después)
+def limpiar_campos():
+    pass
+
+def calcular_sistema():
+    pass
+
+def calcular_determinante():
+    pass
+
+# 2. Botones centrales
+btn_borrar = tk.Button(frame_inferior, text="Borrar valores", command=limpiar_campos)
+btn_borrar.grid(row=1, column=1, padx=5, sticky="e")
+
+btn_calcular = tk.Button(frame_inferior, text="Calcular", command=calcular_sistema)
+btn_calcular.grid(row=1, column=2, padx=5, sticky="w")
+
+# 3. Fila del Determinante
+lbl_det = tk.Label(frame_inferior, text="Determinante:")
+lbl_det.grid(row=2, column=0, sticky="e", pady=(15, 0))
+
+# Campo de texto de solo lectura para mostrar el resultado del determinante
+entry_det = tk.Entry(frame_inferior, width=10, state="readonly")
+entry_det.grid(row=2, column=1, pady=(15, 0))
+
+btn_det = tk.Button(frame_inferior, text="Calcular det.", command=calcular_determinante)
+btn_det.grid(row=2, column=2, padx=5, sticky="w", pady=(15, 0))
+# --- Fin PASO 4 ---
+
 # Iniciar el bucle de eventos
 ventana.mainloop()
